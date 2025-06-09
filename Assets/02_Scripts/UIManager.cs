@@ -19,5 +19,12 @@ public class UIManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
+
+    void Start()
+    {
+        mainMenuUI.gameObject.SetActive(true);
+        statusUI.gameObject.SetActive(false);
+        inventoryUI.gameObject.SetActive(false);
+    }
 }
 
