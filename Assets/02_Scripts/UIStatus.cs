@@ -19,8 +19,6 @@ public class UIStatus : MonoBehaviour
             Debug.LogError("GameManager instance is not set. Please ensure GameManager is initialized before UIStatus.");
             return;
         }
-        Character player = GameManager.Instance.Player;
-        SetCharacterInfo(player);
     }
 
     private void Start()
@@ -34,7 +32,10 @@ public class UIStatus : MonoBehaviour
 
     public void SetCharacterInfo(Character character)
     {
-        
+        ATKText.text = $"{character.Atk}";
+        DEFText.text = $"{character.Def}";
+        healthText.text = $"{character.Hp}";
+        CRIText.text = $"{character.Cri}";
     }
 }
 

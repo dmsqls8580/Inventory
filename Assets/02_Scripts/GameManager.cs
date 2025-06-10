@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         Sprite dummyIcon1 = Resources.Load<Sprite>("Icons/axe");
         Sprite dummyIcon2 = Resources.Load<Sprite>("Icons/bottle");
 
-        var item1 = new Item("µµ³¢", dummyIcon1, true);
+        var item1 = new Item("µµ³¢", dummyIcon1, false);
         var item2 = new Item("¹°Åë", dummyIcon2, false);
         var item3 = new Item("½Ä·®", dummyIcon2, false);
 

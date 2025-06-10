@@ -19,8 +19,6 @@ public class UIMainMenu : MonoBehaviour
             Debug.LogError("GameManager instance is not set. Please ensure GameManager is initialized before UIMainMenu.");
             return;
         }
-        Character player = GameManager.Instance.Player;
-        SetCharacterInfo(player);
     }
 
     private void Start()
