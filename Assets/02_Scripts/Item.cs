@@ -1,16 +1,19 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Item
 {
-    public string Name { get; private set; }
-    public Sprite Icon { get; private set; }
+    public ItemData itemData { get; private set; }
+    public int stackCount { get; private set; }
     public bool IsEquipped { get; private set; }
 
-    public Item(string name, Sprite icon, bool isEquipped = false)
+    // itemData에서 이름과 아이콘을 가져오기
+    public string Name => itemData.name;
+    public Sprite Icon => itemData.icon;
+
+    public Item(ItemData data, int count = 1, bool isEquipped = false)
     {
-        Name = name;
-        Icon = icon;
+        itemData = data;
+        stackCount = count;
         IsEquipped = isEquipped;
     }
 
@@ -22,5 +25,15 @@ public class Item
     public void UnEquip()
     {
         IsEquipped = false;
+    }
+
+    public void AddStack(int amount)
+    {
+        stackCount += amount;
+    }
+
+    public void RemoveStack(int amount)
+    {
+        stackCount = Mathf.Max(stackCount - amount, 0);
     }
 }
