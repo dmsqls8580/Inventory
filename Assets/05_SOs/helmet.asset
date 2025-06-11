@@ -18,6 +18,7 @@ MonoBehaviour:
   maxStack: 1
   isStackable: 0
   isEquipable: 1
+  equipType: 2
   bonusAtk: 0
   bonusDef: 15
   bonusHp: 5

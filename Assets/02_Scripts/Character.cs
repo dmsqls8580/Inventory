@@ -11,23 +11,26 @@ public class Character
     private float baseHp;
     private float baseCri;
 
-    public float Atk => baseAtk + GetEquipBonusAtk();
-    public float Def => baseDef + GetEquipBonusDef();
-    public float Hp => baseHp + GetEquipBonusHp();
-    public float Cri => baseCri + GetEquipBonusCri();
+    public float Atk => baseAtk + GetEquipBonus(i => i.itemData.bonusAtk);
+    public float Def => baseDef + GetEquipBonus(i => i.itemData.bonusDef);
+    public float Hp => baseHp + GetEquipBonus(i => i.itemData.bonusHp);
+    public float Cri => baseCri + GetEquipBonus(i => i.itemData.bonusCri);
+
+    public Item EquippedWeapon { get; private set; }
+    public Item EquippedArmor { get; private set; }
+    public Item EquippedAccessory { get; private set; }
 
     public List<Item> Inventory { get; private set; } = new List<Item>();
-    public List<Item> EquippedItems { get; private set; } = new List<Item>();
 
-    public Character(string name, int level, int gold, int ATK, int DEF, int HP, int CRI)
+    public Character(string name, int level, int gold, int atk, int def, int hp, int cri)
     {
         Name = name;
         Level = level;
         Gold = gold;
-        baseAtk = ATK;
-        baseDef = DEF;
-        baseHp = HP;
-        baseCri = CRI;
+        baseAtk = atk;
+        baseDef = def;
+        baseHp = hp;
+        baseCri = cri;
     }
 
     public void AddItem(Item item)
@@ -37,59 +40,43 @@ public class Character
 
     public void Equip(Item item)
     {
-        if (Inventory.Contains(item) && !EquippedItems.Contains(item))
+        if (!Inventory.Contains(item)) return;
+        if (!item.itemData.isEquipable) return;
+
+        switch (item.itemData.equipType)
         {
-            item.Equip();
-            EquippedItems.Add(item);
+            case EquipType.Weapon:
+                if (EquippedWeapon != null) EquippedWeapon.UnEquip();
+                EquippedWeapon = item;
+                break;
+            case EquipType.Armor:
+                if (EquippedArmor != null) EquippedArmor.UnEquip();
+                EquippedArmor = item;
+                break;
+            case EquipType.Accessory:
+                if (EquippedAccessory != null) EquippedAccessory.UnEquip();
+                EquippedAccessory = item;
+                break;
         }
+
+        item.Equip();
     }
 
     public void UnEquip(Item item)
     {
-        if (EquippedItems.Contains(item))
-        {
-            item.UnEquip();
-            EquippedItems.Remove(item);
-        }
+        if (item == EquippedWeapon) { EquippedWeapon.UnEquip(); EquippedWeapon = null; }
+        else if (item == EquippedArmor) { EquippedArmor.UnEquip(); EquippedArmor = null; }
+        else if (item == EquippedAccessory) { EquippedAccessory.UnEquip(); EquippedAccessory = null; }
     }
 
-    private float GetEquipBonusAtk()
+    private float GetEquipBonus(System.Func<Item, float> statSelector)
     {
         float bonus = 0;
-        foreach (var item in EquippedItems)
-        {
-            bonus += item.itemData.bonusAtk; // itemData에 보너스 스탯 추가 필요
-        }
-        return bonus;
-    }
 
-    private float GetEquipBonusDef()
-    {
-        float bonus = 0;
-        foreach (var item in EquippedItems)
-        {
-            bonus += item.itemData.bonusDef;
-        }
-        return bonus;
-    }
+        if (EquippedWeapon != null) bonus += statSelector(EquippedWeapon);
+        if (EquippedArmor != null) bonus += statSelector(EquippedArmor);
+        if (EquippedAccessory != null) bonus += statSelector(EquippedAccessory);
 
-    private float GetEquipBonusHp()
-    {
-        float bonus = 0;
-        foreach (var item in EquippedItems)
-        {
-            bonus += item.itemData.bonusHp;
-        }
-        return bonus;
-    }
-
-    private float GetEquipBonusCri()
-    {
-        float bonus = 0;
-        foreach (var item in EquippedItems)
-        {
-            bonus += item.itemData.bonusCri;
-        }
         return bonus;
     }
 }
