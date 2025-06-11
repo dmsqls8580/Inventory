@@ -52,11 +52,13 @@ https://github.com/dmsqls8580
 
 ## 라이선스 및 출처
 ### Kyrise's Free 16x16 RPG Icon Pack
-라이선스: CC BY 4.0 (저작자 표시 필수)
+라이선스: CC BY 4.0 (저작자 표시 필수
+
 출처: https://kyrise.itch.io/kyrises-free-16x16-rpg-icon-pack
 
 ### Complete UI Book Styles Pack (Crusenho)
 개인 및 상업적 사용 가능, 출처 표시 권장
+
 출처: https://crusenho.itch.io/complete-ui-book-styles-pack
 
 저작자에게 감사드리며, 에셋은 라이선스에 맞게 사용했습니다.
