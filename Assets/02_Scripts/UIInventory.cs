@@ -35,6 +35,23 @@ public class UIInventory : MonoBehaviour
         useButton.gameObject.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            // 장착 버튼이 활성화되어 있으면 클릭 이벤트 호출
+            if (equipButton.gameObject.activeSelf && equipButton.interactable)
+            {
+                OnEquipButtonClicked();
+            }
+            // 아니면 사용 버튼이 활성화되어 있으면 클릭 이벤트 호출
+            else if (useButton.gameObject.activeSelf && useButton.interactable)
+            {
+                OnUseButtonClicked();
+            }
+        }
+    }
+
     public void InitInventoryUI(List<Item> items)
     {
         // 기존 슬롯 제거
