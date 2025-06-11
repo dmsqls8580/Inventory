@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -70,7 +71,7 @@ public class UIInventory : MonoBehaviour
         if (selectedSlot != null)
             selectedSlot.SetSelected(false);
 
-        // 새 선택 슬롯 찾기 (items와 슬롯 리스트의 인덱스가 1:1 매칭인 경우)
+        // 새 선택 슬롯 찾기
         selectedSlot = slots.Find(slot => slot.GetItem() == item);
 
         if (selectedSlot != null)
@@ -109,13 +110,34 @@ public class UIInventory : MonoBehaviour
         // 스탯 UI 갱신
         UIManager.Instance.Status.SetCharacterInfo(GameManager.Instance.Player);
     }
+
     private void OnUseButtonClicked()
     {
         if (selectedItem != null && selectedItem.itemData.itemType == ItemType.Consumable)
         {
             GameManager.Instance.Player.Use(selectedItem);
+
+            // 수량 0이면 제거 및 슬롯 비움
+            if (selectedItem.stackCount <= 0)
+            {
+                GameManager.Instance.Player.Inventory.Remove(selectedItem);
+                selectedItem = null;
+                selectedSlot = null;
+            }
+
+            // UI 갱신
             InitInventoryUI(GameManager.Instance.Player.Inventory);
-            UIManager.Instance.Status.SetCharacterInfo(GameManager.Instance.Player); // 스탯 갱신
+
+            // 사용 후에도 같은 슬롯 다시 선택되도록 설정
+            if (selectedItem != null)
+            {
+                // 아이템이 여전히 남아있으면 해당 슬롯 다시 찾아서 선택 상태 유지
+                var newSlot = slots.FirstOrDefault(slot => slot.Item == selectedItem);
+                if (newSlot != null)
+                {
+                    OnSlotClicked(newSlot.Item);
+                }
+            }
         }
     }
 

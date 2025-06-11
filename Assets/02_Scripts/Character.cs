@@ -98,8 +98,6 @@ public class Character
             {
                 Inventory.Remove(item);
             }
-
-            // UI 갱신 필요 (외부에서 호출)
         }
     }
 

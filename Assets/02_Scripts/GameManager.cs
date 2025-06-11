@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     private void SetData()
     {
-        // 캐릭터 초기화 (예시)
+        // 캐릭터 초기화
         Player = new Character("Chad", 7, 20000, 10, 8, 100, 3);
 
         // 인스펙터에서 등록한 초기 아이템들을 인벤토리에 추가

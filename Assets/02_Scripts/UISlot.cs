@@ -9,10 +9,12 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image icon;
     [SerializeField] private Image selected;
     [SerializeField] private Image equipMark; // 장착 여부 표시
-    [SerializeField] private TMP_Text quantityText; // 아이템 개수 표시용
+    [SerializeField] private TMP_Text quantityText; // 아이템 개수 표시
 
     private Item item;
     private bool isSelected = false;
+
+    public Item Item => item;
 
     public event Action<Item> OnClick; // 클릭 시 아이템 정보를 전달
 
