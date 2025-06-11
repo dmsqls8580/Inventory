@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class UIInventory : MonoBehaviour
 {
+    [SerializeField] private TMP_Text inventoryCountText;
+    [SerializeField] private int maxInventoryCapacity = 150;
+
     [SerializeField] private Transform slotParent;
     [SerializeField] private UISlot slotPrefab;
     [SerializeField] private Button backButton;
@@ -53,6 +56,8 @@ public class UIInventory : MonoBehaviour
         selectedItem = null;
         selectedSlot = null;
         equipButton.gameObject.SetActive(false);
+
+        UpdateInventoryCountText(items.Count); // 인벤토리 수량 텍스트 갱신
     }
 
     private void OnSlotClicked(Item item)
@@ -120,5 +125,10 @@ public class UIInventory : MonoBehaviour
         {
             slot.RefreshUI();
         }
+    }
+
+    private void UpdateInventoryCountText(int currentCount)
+    {
+        inventoryCountText.text = $"Inventory {currentCount}/{maxInventoryCapacity}";
     }
 }
