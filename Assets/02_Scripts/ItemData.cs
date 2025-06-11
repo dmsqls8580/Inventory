@@ -33,4 +33,7 @@ public class ItemData : ScriptableObject
     public float bonusDef;
     public float bonusHp;
     public float bonusCri;
+
+    // 소비형 아이템일 경우
+    public float healAmount;
 }

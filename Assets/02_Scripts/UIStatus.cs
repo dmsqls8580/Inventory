@@ -34,7 +34,7 @@ public class UIStatus : MonoBehaviour
     {
         ATKText.text = $"{character.Atk}";
         DEFText.text = $"{character.Def}";
-        healthText.text = $"{character.Hp}";
+        healthText.text = $"{character.CurrentHp} / {character.MaxHp}";
         CRIText.text = $"{character.Cri}";
     }
 }

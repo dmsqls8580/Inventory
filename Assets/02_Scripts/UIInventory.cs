@@ -9,7 +9,8 @@ public class UIInventory : MonoBehaviour
     [SerializeField] private UISlot slotPrefab;
     [SerializeField] private Button backButton;
 
-    [SerializeField] private Button equipButton;  // 장착 버튼 (인스펙터에서 연결)
+    [SerializeField] private Button equipButton;  // 장착 버튼
+    [SerializeField] private Button useButton;  // 사용 버튼
 
     private List<UISlot> slots = new List<UISlot>();
     private Item selectedItem;  // 현재 선택된 아이템
@@ -25,6 +26,9 @@ public class UIInventory : MonoBehaviour
 
         equipButton.onClick.AddListener(OnEquipButtonClicked);
         equipButton.gameObject.SetActive(false); // 초기엔 비활성화
+
+        useButton.onClick.AddListener(OnUseButtonClicked);
+        useButton.gameObject.SetActive(false);
     }
 
     public void InitInventoryUI(List<Item> items)
@@ -67,17 +71,21 @@ public class UIInventory : MonoBehaviour
         if (selectedSlot != null)
             selectedSlot.SetSelected(true);
 
-        // 장착 버튼 활성화 여부 판단
-        if (item != null && item.itemData.isEquipable)
+        // 장착/사용 버튼 활성화 여부 판단
+        if (item != null)
         {
-            equipButton.gameObject.SetActive(true);
+            equipButton.gameObject.SetActive(item.itemData.isEquipable);
+            useButton.gameObject.SetActive(item.itemData.itemType == ItemType.Consumable);
+
             equipButton.GetComponentInChildren<TMP_Text>().text = item.IsEquipped ? "해제하기" : "장착하기";
         }
         else
         {
             equipButton.gameObject.SetActive(false);
+            useButton.gameObject.SetActive(false);
         }
     }
+
 
     private void OnEquipButtonClicked()
     {
@@ -95,6 +103,15 @@ public class UIInventory : MonoBehaviour
 
         // 스탯 UI 갱신
         UIManager.Instance.Status.SetCharacterInfo(GameManager.Instance.Player);
+    }
+    private void OnUseButtonClicked()
+    {
+        if (selectedItem != null && selectedItem.itemData.itemType == ItemType.Consumable)
+        {
+            GameManager.Instance.Player.Use(selectedItem);
+            InitInventoryUI(GameManager.Instance.Player.Inventory);
+            UIManager.Instance.Status.SetCharacterInfo(GameManager.Instance.Player); // 스탯 갱신
+        }
     }
 
     private void RefreshAllSlots()

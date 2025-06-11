@@ -11,9 +11,11 @@ public class Character
     private float baseHp;
     private float baseCri;
 
+    private float currentHp;
+    public float CurrentHp => currentHp;
     public float Atk => baseAtk + GetEquipBonus(i => i.itemData.bonusAtk);
     public float Def => baseDef + GetEquipBonus(i => i.itemData.bonusDef);
-    public float Hp => baseHp + GetEquipBonus(i => i.itemData.bonusHp);
+    public float MaxHp => baseHp + GetEquipBonus(i => i.itemData.bonusHp);
     public float Cri => baseCri + GetEquipBonus(i => i.itemData.bonusCri);
 
     public Item EquippedWeapon { get; private set; }
@@ -31,6 +33,7 @@ public class Character
         baseDef = def;
         baseHp = hp;
         baseCri = cri;
+        currentHp = MaxHp; // 초기값은 최대 체력
     }
 
     public void AddItem(Item item)
@@ -78,5 +81,32 @@ public class Character
         if (EquippedAccessory != null) bonus += statSelector(EquippedAccessory);
 
         return bonus;
+    }
+
+    public void Use(Item item)
+    {
+        if (item.itemData.itemType == ItemType.Consumable)
+        {
+            // 체력 회복 처리
+            Heal(item.itemData.healAmount);
+
+            // 스택 수 감소
+            item.RemoveStack(1);
+
+            // 수량이 0이면 인벤토리에서 제거
+            if (item.stackCount <= 0)
+            {
+                Inventory.Remove(item);
+            }
+
+            // UI 갱신 필요 (외부에서 호출)
+        }
+    }
+
+    private void Heal(float amount)
+    {
+        currentHp += amount;
+        if (currentHp > MaxHp)
+            currentHp = MaxHp;
     }
 }
